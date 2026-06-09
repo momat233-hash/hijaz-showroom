@@ -6,3 +6,5 @@ build/
 *.sln
 .DS_Store
 npm-cache/
+*.tmp
+serve_*.txt

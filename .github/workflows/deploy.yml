@@ -1,0 +1,57 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: |
+          export CI=false
+          export NODE_OPTIONS=--openssl-legacy-provider
+          npm run build
+
+      - name: Create .htaccess
+        run: |
+          cat > build/.htaccess << 'EOF'
+          RewriteEngine On
+          RewriteBase /
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . /index.html [L]
+          <FilesMatch "^\.">
+              Order allow,deny
+              Deny from all
+          </FilesMatch>
+          AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+          <filesMatch "\.(ico|pdf|jpg|jpeg|png|gif|svg|js|css|woff2?)$">
+              Header set Cache-Control "max-age=2592000, public"
+          </filesMatch>
+          EOF
+
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: build/
+          server-dir: public_html/
+          dangerous-clean-slate: true
+          exclude: |
+            **/.htaccess
