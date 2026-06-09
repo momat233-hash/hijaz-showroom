@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head><meta charset="utf-8"><title>تعليمات الرفع - Hijaz Showroom</title>
+<style>
+body{font-family:sans-serif;background:#0a0e1a;color:#e8edf5;padding:40px;max-width:700px;margin:auto}
+h1{color:#4a9eff}
+code{background:#1a2040;padding:2px 8px;border-radius:6px}
+.step{background:#141828;border:1px solid #2a3050;border-radius:16px;padding:20px;margin:16px 0}
+.step h3{color:#34d399;margin:0 0 10px}
+</style>
+</head>
+<body>
+<h1>🚀 رفع الموقع إلى الاستضافة</h1>
+
+<div class="step">
+<h3>الخيار 1: عبر cPanel (الطريقة الأسهل)</h3>
+<p>1. افتح المتصفح على الرابط:</p>
+<p><code>https://server2.web-hosting.com:2083</code></p>
+<p>2. سجل الدخول:</p>
+<p>المستخدم: <code>gkldeed</code> | كلمة السر: <code>Alpha02#</code></p>
+<p>3. اذهب إلى <strong>File Manager</strong> → <strong>public_html</strong></p>
+<p>4. احذف كل الملفات الموجودة في public_html</p>
+<p>5. ارفع محتويات مجلد <code>build/</code> بالكامل</p>
+</div>
+
+<div class="step">
+<h3>الخيار 2: عبر FTP</h3>
+<p>استخدم برنامج FileZilla أو أي FTP client:</p>
+<p>Host: <code>server2.web-hosting.com</code></p>
+<p>Port: <code>21</code></p>
+<p>User: <code>gkldeed</code></p>
+<p>Pass: <code>Alpha02#</code></p>
+<p>ارفع محتويات <code>build/</code> إلى المجلد الرئيسي</p>
+</div>
+
+<div class="step">
+<h3>تثبيت SSL</h3>
+<p>في cPanel → SSL/TLS → Install and Manage SSL</p>
+<p>اختر الدومين <code>hejaz2.com</code> → ثبت الشهادة</p>
+<p>SSL ID: <code>34598389</code></p>
+</div>
+
+<div class="step">
+<h3>توجيه الدومين</h3>
+<p>من Namecheap → Domain List → hejaz2.com → Nameservers</p>
+<p>ضع Nameservers الهاستينغ من بريد التفعيل</p>
+</div>
+</body>
+</html>
