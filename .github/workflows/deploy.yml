@@ -1,13 +1,26 @@
-name: Deploy to cPanel
+name: Deploy Site
 
 on:
   push:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -44,7 +57,17 @@ jobs:
           </filesMatch>
           EOF
 
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: build/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
       - name: Deploy to cPanel via FTP
+        if: ${{ secrets.FTP_HOST != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -53,5 +76,3 @@ jobs:
           local-dir: build/
           server-dir: public_html/
           dangerous-clean-slate: true
-          exclude: |
-            **/.htaccess
