@@ -1,6 +1,6 @@
 node_modules/
 npm-debug.log*
-build/
+# build/
 .env.local
 *.njsproj
 *.sln
@@ -8,3 +8,4 @@ build/
 npm-cache/
 *.tmp
 serve_*.txt
+
